@@ -1,1 +1,1 @@
-declare module '@inordine/mongo-helper';
+declare module '@quantos/mongo-helper';
