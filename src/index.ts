@@ -14,7 +14,7 @@ export class MongoHelper {
  
   static connect(): Promise<any> {
     return new Promise<any>((resolve, reject) => {
-      mongo.MongoClient.connect(process.env.MONGO_URL, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client: mongo.MongoClient) => {
+      mongo.MongoClient.connect(process.env.MONGO_URL, (err, client: mongo.MongoClient) => {
         if (err) {
           reject(err);
         } else {
@@ -28,7 +28,7 @@ export class MongoHelper {
   static async session<T>(operation: (session: mongo.ClientSession) => Promise<T>): Promise<T> {
     await this.db();
     const session = this.client.startSession({ defaultTransactionOptions: {
-      readPreference: 'primary',
+      readPreference: mongo.ReadPreference.fromString("primary"),
       readConcern: { level: 'local' },
       writeConcern: { w: 'majority' }
     }});
