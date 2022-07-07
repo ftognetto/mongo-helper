@@ -43,7 +43,7 @@ class MongoHelper {
     }
     static connect() {
         return new Promise((resolve, reject) => {
-            mongo.MongoClient.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
+            mongo.MongoClient.connect(process.env.MONGO_URL, (err, client) => {
                 if (err) {
                     reject(err);
                 }
@@ -58,7 +58,7 @@ class MongoHelper {
         return __awaiter(this, void 0, void 0, function* () {
             yield this.db();
             const session = this.client.startSession({ defaultTransactionOptions: {
-                    readPreference: 'primary',
+                    readPreference: mongo.ReadPreference.fromString("primary"),
                     readConcern: { level: 'local' },
                     writeConcern: { w: 'majority' }
                 } });
