@@ -7,14 +7,14 @@ export class MongoHelper {
   constructor() {
   }
 
-  static async db(): Promise<mongo.Db> { 
-    if (!MongoHelper.client) { await this.connect(); }
+  static async db(mongoUrl?: string): Promise<mongo.Db> { 
+    if (!MongoHelper.client) { await this.connect(mongoUrl); }
     return MongoHelper.client.db();
   }
  
-  static connect(): Promise<any> {
+  static connect(mongoUrl?: string): Promise<any> {
     return new Promise<any>((resolve, reject) => {
-      mongo.MongoClient.connect(process.env.MONGO_URL, (err, client: mongo.MongoClient) => {
+      mongo.MongoClient.connect(mongoUrl || process.env.MONGO_URL, (err, client: mongo.MongoClient) => {
         if (err) {
           reject(err);
         } else {
