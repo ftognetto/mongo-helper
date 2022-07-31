@@ -1,7 +1,11 @@
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -33,17 +37,17 @@ const mongo = __importStar(require("mongodb"));
 class MongoHelper {
     constructor() {
     }
-    static db() {
+    static db(mongoUrl) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!MongoHelper.client) {
-                yield this.connect();
+                yield this.connect(mongoUrl);
             }
             return MongoHelper.client.db();
         });
     }
-    static connect() {
+    static connect(mongoUrl) {
         return new Promise((resolve, reject) => {
-            mongo.MongoClient.connect(process.env.MONGO_URL, (err, client) => {
+            mongo.MongoClient.connect(mongoUrl || process.env.MONGO_URL, (err, client) => {
                 if (err) {
                     reject(err);
                 }
